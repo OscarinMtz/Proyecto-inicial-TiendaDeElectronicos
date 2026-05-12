@@ -1,5 +1,47 @@
 📦 Plan de Implementación: Aplicación "ElectroAdmin" (Gestión Multiplataforma para Tienda de Electrónicos)
 
+📁 **Estructura de Carpetas y Organización del Proyecto**
+
+```
+lib/
+├── core/
+│   ├── constants/          # Rutas, strings, configuración de Firebase, límites de stock mínimo
+│   ├── theme/              # ThemeData (paleta gris/azul profesional), tipografía, espaciado base 8px
+│   ├── utils/              # Formateadores (precios DECIMAL, fechas, SKU), validadores, logger
+│   └── router/             # go_router, guards por rol (Admin/Vendedor/Almacenista), deep links
+├── data/
+│   ├── models/             # Clases mapeadas a Firestore: Categoria, Producto, VarianteProducto, Almacen, Inventario, Empleado, Cliente, Pedido, DetallePedido, Pago, Envio, Proveedor, OrdenCompra, DetalleCompra
+│   ├── repositories/       # Métodos CRUD aislados por entidad con Cloud Firestore y offline cache
+│   └── services/           # Lógica de negocio: cálculo de `total_neto`, validación de stock, transacciones atómicas, aplicación de `descuento_aplicado`, congelamiento de `precio_unitario_historico`
+├── presentation/
+│   ├── providers/          # Gestores de estado por módulo (AuthProvider, CatalogoProvider, InventarioProvider, VentasProvider, ComprasProvider)
+│   ├── screens/
+│   │   ├── auth/           # Login, Registro, Recuperación de contraseña
+│   │   ├── dashboard/      # Métricas, alertas de stock mínimo (`stock_actual < stock_minimo`), resumen de ventas diarias
+│   │   ├── catalogos/      # Gestión de Categorías, Productos, Variantes y Proveedores
+│   │   ├── inventario/     # Control de Almacenes, ajustes de stock multi-sucursal, historial de movimientos
+│   │   ├── ventas/         # Clientes, Pedidos, DetallePedido, Pagos y Envíos (flujo 1:1)
+│   │   └── abastecimiento/ # Órdenes de Compra y DetalleCompra (recepción y actualización de costos)
+│   └── widgets/
+│       ├── common/         # Tablas responsivas, campos flotantes, diálogos de confirmación, badges de estado
+│       ├── product/        # Tarjetas de producto, selector de variante (color/almacenamiento), vista de SKU
+│       ├── inventory/      # Indicadores visuales de stock, alertas de reposición, barras de progreso
+│       └── forms/          # Formularios reutilizables (nuevo pedido, registro de compra, alta de cliente/empleado)
+└── main.dart               # Punto de entrada, inicialización Firebase, runApp, config de tema
+assets/
+├── images/                 # Logos, fondos técnicos, iconos por categoría electrónica
+├── fonts/                  # Tipografías oficiales (Inter/Roboto)
+└── icons/                  # Launcher icons y splash screen
+test/
+├── unit/                   # Pruebas de servicios, validadores, cálculos de totales y márgenes
+├── widget/                 # Pruebas de componentes UI (tablas de inventario, formularios de pedido, diálogos)
+└── integration/            # Flujos completos: login → selección variante → validación stock → creación pedido → descuento → pago → envío
+pubspec.yaml
+firebase.json
+.firebaserc
+.gitignore
+```
+
 🛠️ 1. Preparación del Entorno y Configuración Inicial
 Instalación de SDK y Herramientas
 • Instalar Flutter SDK estable y verificar compatibilidad con canales Android, iOS, Web y Windows.
